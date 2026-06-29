@@ -1,4 +1,5 @@
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 print("Current directory:", os.getcwd())
 print("Files inside data folder:")
@@ -18,7 +19,12 @@ app = FastAPI(
     title="Fashion Journey Intelligence Platform",
     version="1.0"
 )
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 products_df = pd.read_csv(
@@ -339,4 +345,146 @@ def test():
         "rows": len(products_df),
         "columns": products_df.columns.tolist()
     }
+
+import re
+from pydantic import BaseModel
+
+# --- Worker Agent #1: Intent extraction (deterministic, no LLM needed) ---
+OCCASION_KEYWORDS = {
+    "wedding": "Wedding Guest",
+    "party": "Party",
+    "office": "Formal / Office",
+    "work": "Formal / Office",
+    "casual": "Casual",
+    "date": "Date Night",
+    "festive": "Festive",
+}
+
+CATEGORY_KEYWORDS = {
+    "dress": "dress",
+    "jeans": "jeans",
+    "shirt": "shirt",
+    "shoes": "shoes",
+    "mule": "shoes",
+    "heels": "shoes",
+    "cardigan": "cardigan",
+    "top": "top",
+    "jacket": "jacket",
+}
+
+
+def extract_intent(message: str) -> dict:
+    msg = message.lower()
+
+    occasion = next(
+        (v for k, v in OCCASION_KEYWORDS.items() if k in msg),
+        "General"
+    )
+    category = next(
+        (v for k, v in CATEGORY_KEYWORDS.items() if k in msg),
+        None
+    )
+
+    # pull the first 3-6 digit number in the message as budget
+    budget_match = re.search(r"(\d{3,6})", msg.replace(",", ""))
+    budget = int(budget_match.group(1)) if budget_match else 5000
+
+    formality = "Elegant, Semi-formal" if occasion in (
+        "Wedding Guest", "Party", "Festive"
+    ) else "Casual"
+
+    return {
+        "occasion": occasion,
+        "category": category,
+        "budget": budget,
+        "formality": formality,
+    }
+
+
+# --- Worker Agent #2: Recommendation (reuses your recommendation_agent.py logic) ---
+def recommend(category: str | None, budget: int) -> list:
+    if category:
+        mask = (
+            products_df["name"].str.contains(category, case=False, na=False)
+            | products_df["terms"].str.contains(category, case=False, na=False)
+            | products_df["Product Category"].str.contains(category, case=False, na=False)
+        )
+        results = products_df[mask & (products_df["price"] * 85 <= budget)]
+    else:
+        results = products_df[products_df["price"] * 85 <= budget]
+
+    picks = []
+    for _, row in results.iterrows():
+        sku = row["sku"]
+        stock_info = inventory.get(sku, {}).get("sizes", {})
+        total_stock = sum(stock_info.values()) if stock_info else 0
+        if total_stock > 0:
+            picks.append({
+                "sku": sku,
+                "name": row["name"],
+                "price_inr": round(row["price"] * 85),
+                "stock": total_stock,
+            })
+    return picks[:3]
+
+
+# --- Worker Agent #3: Loyalty / customer profile lookup ---
+def get_profile(customer_id: str) -> dict:
+    for entry in loyalty:
+        if entry.get("customer_id") == customer_id:
+            return entry
+    return {"tier": "Standard", "points": 0}
+
+# --- Request model ---
+class ChatRequest(BaseModel):
+    customer_id: str
+    message: str
+
+
+# --- The orchestrator endpoint ---
+@app.post("/chat")
+def chat(req: ChatRequest):
+    intent = extract_intent(req.message)
+    picks = recommend(intent["category"], intent["budget"])
+    profile = get_profile(req.customer_id)
+
+    # record this as a journey event too, so journey_intelligence.py has data
+    try:
+        with open("data/journey_events.json", "r") as f:
+            events = json.load(f)
+    except Exception:
+        events = []
+    events.append({
+        "customer_id": req.customer_id,
+        "event_type": "chat_query",
+        "channel": "web_chat",
+        "sku": picks[0]["sku"] if picks else None,
+    })
+    with open("data/journey_events.json", "w") as f:
+        json.dump(events, f, indent=4)
+
+    if picks:
+        reply = (
+            f"I found {len(picks)} pieces for your "
+            f"{intent['occasion'].lower()} look, under "
+            f"₹{intent['budget']}."
+        )
+    else:
+        reply = (
+            "I couldn't find an exact match in stock for that — "
+            "want me to widen the budget or try a different category?"
+        )
+
+    return {
+        "reply": reply,
+        "agent_panel": {
+            "intent_extracted": intent,
+            "agent_routing_flow": [
+                "Sales Agent", "Recommend", "Inventory", "Pricing"
+            ],
+            "customer_profile": profile,
+        },
+        "recommendations": picks,
+    }
+
 
