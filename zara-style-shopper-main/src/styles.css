@@ -1,0 +1,83 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-cream: var(--cream);
+  --color-beige: var(--beige);
+  --color-beige-deep: var(--beige-deep);
+  --color-ink: var(--ink);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --font-display: "Cormorant Garamond", "Times New Roman", serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+:root {
+  --radius: 0.25rem;
+  --cream: oklch(0.975 0.008 75);
+  --beige: oklch(0.88 0.018 75);
+  --beige-deep: oklch(0.78 0.025 65);
+  --ink: oklch(0.15 0 0);
+
+  --background: oklch(0.985 0.005 80);
+  --foreground: oklch(0.15 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0 0);
+  --primary: oklch(0.15 0 0);
+  --primary-foreground: oklch(0.985 0.005 80);
+  --secondary: oklch(0.93 0.012 75);
+  --secondary-foreground: oklch(0.15 0 0);
+  --muted: oklch(0.94 0.008 75);
+  --muted-foreground: oklch(0.45 0.01 75);
+  --accent: oklch(0.88 0.018 75);
+  --accent-foreground: oklch(0.15 0 0);
+  --destructive: oklch(0.55 0.20 25);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.88 0.012 75);
+  --input: oklch(0.88 0.012 75);
+  --ring: oklch(0.15 0 0);
+  --success: oklch(0.55 0.14 150);
+  --warning: oklch(0.68 0.16 55);
+  --danger: oklch(0.55 0.20 25);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: -0.01em; }
+  .tracking-brand { letter-spacing: 0.35em; }
+}
