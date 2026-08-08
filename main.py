@@ -523,10 +523,9 @@ support_agent = HumanSupportAgent()
 followup_agent = FollowUpAgent()
 from supabase import create_client as supabase_create_client
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://fzpubtkvsrzvjsisjwyg.supabase.co")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "sb_secret_rqQWCUFzGeTfbZvtzUU4vw_2o6tImki")
-GROQ_KEY = os.environ.get("GROQ_API_KEY", "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")
-
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+GROQ_KEY = os.environ.get("GROQ_API_KEY")
 sb = supabase_create_client(SUPABASE_URL, SUPABASE_KEY)
 groq_client = Groq(api_key=GROQ_KEY)
 
