@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-const BACKEND_URL = "http://localhost:8000/chat-ai";
-const PAYMENT_URL = "http://localhost:8000/payment";
-const RESERVE_URL = "http://localhost:8000/reserve";
-const ESCALATE_URL = "http://localhost:8000/escalate";
-const FOLLOWUP_URL = "http://localhost:8000/followup";
+const BACKEND_URL = "https://salesgenie-backend.onrender.com/chat-ai";
+const PAYMENT_URL = "https://salesgenie-backend.onrender.com/payment";
+const RESERVE_URL = "https://salesgenie-backend.onrender.com/reserve";
+const ESCALATE_URL = "https://salesgenie-backend.onrender.com/escalate";
+const FOLLOWUP_URL = "https://salesgenie-backend.onrender.com/followup";
 const CUSTOMER_ID = "C001";
 
 type AgentPanel = {
