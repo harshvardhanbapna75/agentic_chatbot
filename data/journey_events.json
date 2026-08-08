@@ -249,5 +249,47 @@
         "event_type": "chat_query",
         "channel": "web_chat",
         "sku": "272145190-250-2"
+    },
+    {
+        "customer_id": "C001",
+        "event_type": "chat_query",
+        "channel": "web_chat",
+        "sku": null
+    },
+    {
+        "customer_id": "C001",
+        "event_type": "chat_query",
+        "channel": "web_chat",
+        "sku": "272145190-250-2"
+    },
+    {
+        "customer_id": "C001",
+        "event_type": "chat_query",
+        "channel": "web_chat",
+        "sku": "289179723-020-2"
+    },
+    {
+        "customer_id": "C001",
+        "event_type": "chat_query",
+        "channel": "web_chat",
+        "sku": null
+    },
+    {
+        "customer_id": "C001",
+        "event_type": "chat_query",
+        "channel": "web_chat",
+        "sku": "272145190-250-2"
+    },
+    {
+        "customer_id": "C001",
+        "event_type": "chat_query",
+        "channel": "web_chat",
+        "sku": "289179723-020-2"
+    },
+    {
+        "customer_id": "C001",
+        "event_type": "chat_query",
+        "channel": "web_chat",
+        "sku": "272145190-250-2"
     }
 ]

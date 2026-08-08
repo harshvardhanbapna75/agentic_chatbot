@@ -2,3 +2,6 @@ fastapi
 uvicorn
 pandas
 pydantic
+supabase
+groq
+python-dotenv

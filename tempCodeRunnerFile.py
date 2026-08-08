@@ -263,35 +263,6 @@ class ReservationRequest(BaseModel):
 def reserve_product(req: ReservationRequest):
     return store_agent.reserve_product(req.customer_id, req.sku)
 
-class EscalateRequest(BaseModel):
-    customer_id: str
-    issue: str
-
-
-@app.post("/escalate")
-def escalate_issue(req: EscalateRequest):
-    return support_agent.escalate(req.customer_id, req.issue)
-
-
-class FollowUpRequest(BaseModel):
-    customer_id: str
-    channel: str = "Website"
-    payment_success: bool
-    purchased_items: list = []
-
-
-@app.post("/followup")
-def followup(req: FollowUpRequest):
-    message = followup_agent.generate_message(
-        req.customer_id, req.channel, req.payment_success, req.purchased_items
-    )
-    return {
-        "customer_id": req.customer_id,
-        "channel": req.channel,
-        "payment_success": req.payment_success,
-        "message": message
-    }
-
 
 @app.post("/journey/event")
 def record_event(
@@ -516,11 +487,6 @@ payment_agent = PaymentAgent()
 from store_reservation_agent import StoreReservationAgent
 
 store_agent = StoreReservationAgent()
-from human_support_agent import HumanSupportAgent
-from followup_agent import FollowUpAgent
-
-support_agent = HumanSupportAgent()
-followup_agent = FollowUpAgent()
 from supabase import create_client as supabase_create_client
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://fzpubtkvsrzvjsisjwyg.supabase.co")

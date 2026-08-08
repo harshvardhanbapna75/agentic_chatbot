@@ -1216,5 +1216,65 @@
         "customer_id": "C002",
         "agent": "HumanSupportAgent",
         "action": "Escalated issue: bank_timeout"
+    },
+    {
+        "timestamp": "2026-07-31 15:13:36.770804",
+        "customer_id": "C001",
+        "agent": "PaymentAgent",
+        "action": "Payment status: upi_failure, Amount: 5941.0"
+    },
+    {
+        "timestamp": "2026-07-31 20:34:53.230490",
+        "customer_id": "C001",
+        "agent": "StoreReservationAgent",
+        "action": "Reserved SKU  for C001"
+    },
+    {
+        "timestamp": "2026-07-31 21:06:55.074318",
+        "customer_id": "C001",
+        "agent": "PaymentAgent",
+        "action": "Payment status: success, Amount: 8491.0"
+    },
+    {
+        "timestamp": "2026-07-31 21:07:04.215646",
+        "customer_id": "C001",
+        "agent": "PaymentAgent",
+        "action": "Payment status: bank_timeout, Amount: 5091.0"
+    },
+    {
+        "timestamp": "2026-07-31 21:07:18.528068",
+        "customer_id": "C001",
+        "agent": "HumanSupportAgent",
+        "action": "Escalated issue: Customer requested human assistance"
+    },
+    {
+        "timestamp": "2026-07-31 23:22:49.090629",
+        "customer_id": "C001",
+        "agent": "StoreReservationAgent",
+        "action": "Reserved SKU  for C001"
+    },
+    {
+        "timestamp": "2026-07-31 23:22:57.823439",
+        "customer_id": "C001",
+        "agent": "PaymentAgent",
+        "action": "Payment status: upi_failure, Amount: 5091.0"
+    },
+    {
+        "timestamp": "2026-07-31 23:23:08.655505",
+        "customer_id": "C001",
+        "agent": "HumanSupportAgent",
+        "action": "Escalated issue: Customer requested human assistance"
+    },
+    {
+        "timestamp": "2026-07-31 23:23:15.561116",
+        "customer_id": "C001",
+        "agent": "PaymentAgent",
+        "action": "Payment status: upi_failure, Amount: 7641.0"
+    },
+    {
+        "timestamp": "2026-07-31 23:23:22.872365",
+        "customer_id": "C001",
+        "agent": "PaymentAgent",
+        "action": "Payment status: upi_failure, Amount: 8491.0"
     }
 ]
